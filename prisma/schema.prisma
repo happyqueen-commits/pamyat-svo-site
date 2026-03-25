@@ -1,0 +1,180 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+enum PersonStatus {
+  DRAFT
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  ARCHIVED
+}
+
+enum PersonRole {
+  MILITARY
+  STUDENT
+  TEACHER
+  CIVILIAN
+  VOLUNTEER
+}
+
+enum MediaType {
+  PHOTO
+  VIDEO
+  AUDIO
+  DOCUMENT
+}
+
+enum SourceType {
+  FAMILY
+  UNIVERSITY
+  EDITORIAL
+  PERSONAL
+}
+
+enum ReviewRequestStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
+  DISMISSED
+}
+
+enum UserRole {
+  AUTHOR
+  MODERATOR
+  ADMIN
+}
+
+model User {
+  id             String       @id @default(cuid())
+  email          String       @unique
+  name           String?
+  passwordHash   String
+  role           UserRole     @default(AUTHOR)
+  emailVerified  Boolean      @default(false)
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  submissions    Submission[]
+  sessions       Session[]
+  auditLogs      AuditLog[]
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  tokenHash    String   @unique
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  lastSeenAt   DateTime @default(now())
+  userAgent    String?
+  ipAddress    String?
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action       String
+  entityType   String
+  entityId     String?
+  details      String?
+  createdAt    DateTime @default(now())
+}
+
+model Person {
+  id                 String              @id @default(cuid())
+  fullName           String
+  birthDate          DateTime?
+  deathDate          DateTime?
+  city               String?
+  region             String?
+  role               PersonRole
+  biography          String
+  memoryText         String?
+  heroQuote          String?
+  sourceType         SourceType?
+  sourceLabel        String?
+  sourceNote         String?
+  status             PersonStatus        @default(PENDING_REVIEW)
+  verified           Boolean             @default(false)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  media              Media[]
+  stories            Story[]
+  submissions        Submission[]
+  correctionRequests CorrectionRequest[]
+}
+
+model Story {
+  id         String   @id @default(cuid())
+  title       String
+  content     String
+  authorName  String?
+  createdAt   DateTime @default(now())
+  personId    String
+  person      Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+}
+
+model Media {
+  id          String    @id @default(cuid())
+  type        MediaType
+  url         String
+  caption     String?
+  createdAt   DateTime  @default(now())
+  personId    String
+  person      Person    @relation(fields: [personId], references: [id], onDelete: Cascade)
+}
+
+model Submission {
+  id             String       @id @default(cuid())
+  submitterName  String
+  submitterEmail String
+  submitterPhone String?
+  relation       String?
+  note           String?
+  status         PersonStatus @default(PENDING_REVIEW)
+  createdAt      DateTime     @default(now())
+  personId       String
+  person         Person       @relation(fields: [personId], references: [id], onDelete: Cascade)
+  userId         String?
+  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  assets         SubmissionAsset[]
+}
+
+model SubmissionAsset {
+  id            String   @id @default(cuid())
+  submissionId  String
+  submission    Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  type          MediaType
+  url           String
+  originalName  String
+  sizeBytes     Int
+  createdAt     DateTime @default(now())
+}
+
+model CorrectionRequest {
+  id            String   @id @default(cuid())
+  personId      String
+  person        Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  contactName   String
+  contactEmail  String
+  message       String
+  status        ReviewRequestStatus @default(NEW)
+  createdAt     DateTime @default(now())
+}
+
+model TimelineEntry {
+  id          String   @id @default(cuid())
+  year        Int
+  title       String
+  description String
+  category    String
+  createdAt   DateTime @default(now())
+}
