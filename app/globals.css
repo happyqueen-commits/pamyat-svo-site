@@ -902,25 +902,40 @@ p {
   max-width: 720px;
   margin: 0 auto;
   padding: 28px;
+  background: var(--surface-strong);
+  border-color: var(--line-strong);
+  box-shadow: 0 26px 64px rgba(10, 31, 68, 0.14);
+}
+
+.auth-card-title {
+  margin: 0 0 14px;
+  font-size: clamp(20px, 2.4vw, 24px);
+  line-height: 1.15;
+  color: var(--fa-blue-dark);
 }
 
 .tabs-row {
   display: inline-flex;
-  gap: 10px;
-  padding: 6px;
+  gap: 6px;
+  padding: 4px;
   border-radius: 999px;
   background: rgba(21, 63, 124, 0.06);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .tab-chip {
   border: 0;
   background: transparent;
   color: var(--fa-blue-dark);
-  padding: 10px 16px;
+  padding: 8px 13px;
   border-radius: 999px;
   font-weight: 700;
+  font-size: 14px;
   cursor: pointer;
+}
+
+.auth-page {
+  margin-top: -14px;
 }
 
 .tab-chip.active {
