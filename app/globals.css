@@ -156,8 +156,11 @@ main.container {
   overflow: visible;
 }
 
+.header-main {
+=======
 .header-main,
 .nav-more {
+main
   overflow: visible;
 }
 
@@ -1282,6 +1285,7 @@ p {
   color: var(--fa-blue-dark);
 }
 
+
 .nav-more {
   position: relative;
 }
@@ -1328,6 +1332,7 @@ p {
   border-radius: 10px;
 }
 
+main
 .alert {
   margin-top: 14px;
   padding: 12px 14px;
@@ -1389,6 +1394,7 @@ p {
     left: 0;
     right: 0;
   }
+main
 
   .person-anchor-nav {
     align-items: flex-start;
@@ -1416,3 +1422,4 @@ p {
   background: rgba(255, 255, 255, 0.99);
   backdrop-filter: blur(10px);
 
+main
