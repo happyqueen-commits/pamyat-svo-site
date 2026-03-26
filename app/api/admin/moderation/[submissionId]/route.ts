@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser, logAudit } from '@/lib/auth';
+import { ensureSameOrigin } from '@/lib/csrf';
 
 const actionMap = {
   approve: 'APPROVED',
@@ -9,6 +10,9 @@ const actionMap = {
 } as const;
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ submissionId: string }> }) {
+  const csrfError = ensureSameOrigin(request);
+  if (csrfError) return csrfError;
+
   const user = await getCurrentUser();
   if (!user || !['MODERATOR', 'ADMIN'].includes(user.role)) {
     return NextResponse.json({ error: 'Недостаточно прав для модерации.' }, { status: 403 });

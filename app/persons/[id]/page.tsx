@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { mediaLabels, roleLabels, sourceTypeLabels } from '@/lib/constants';
 import { getInitials, getPersonCoverStyle } from '@/lib/presentation';
 import { CorrectionForm } from '@/app/components/CorrectionForm';
+import { safeDb } from '@/lib/db-safe';
 
 function formatDate(value: Date) {
   return new Intl.DateTimeFormat('ru-RU', { day: '2-digit', month: 'long', year: 'numeric' }).format(value);
@@ -11,7 +12,7 @@ function formatDate(value: Date) {
 
 export default async function PersonPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const person = await prisma.person.findUnique({
+  const person = await safeDb(() => prisma.person.findUnique({
     where: { id },
     include: {
       media: { orderBy: { createdAt: 'desc' } },
@@ -21,7 +22,7 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
         take: 1
       }
     }
-  });
+  }), null);
 
   if (!person || person.status !== 'APPROVED') {
     notFound();

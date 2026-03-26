@@ -3,6 +3,7 @@ import { PersonRole } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { roleLabels } from '@/lib/constants';
 import { PersonCard } from '../components/PersonCard';
+import { safeDb } from '@/lib/db-safe';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,24 +16,23 @@ export default async function ArchivePage({
   const q = params.q?.trim() || '';
   const role = params.role || 'ALL';
 
-  const basePersons = await prisma.person.findMany({
+  const persons = await safeDb(() => prisma.person.findMany({
     where: {
       status: 'APPROVED',
-      ...(role !== 'ALL' ? { role } : {})
+      ...(role !== 'ALL' ? { role } : {}),
+      ...(q
+        ? {
+            OR: [
+              { fullName: { contains: q } },
+              { city: { contains: q } },
+              { region: { contains: q } },
+              { biography: { contains: q } }
+            ]
+          }
+        : {})
     },
     orderBy: [{ verified: 'desc' }, { createdAt: 'desc' }]
-  });
-
-  const searchNeedle = q.toLocaleLowerCase('ru-RU');
-  const persons = q
-    ? basePersons.filter((person) => {
-        const haystack = [person.fullName, person.city, person.region, person.biography]
-          .filter(Boolean)
-          .join(' ')
-          .toLocaleLowerCase('ru-RU');
-        return haystack.includes(searchNeedle);
-      })
-    : basePersons;
+  }), []);
 
   return (
     <div className="grid" style={{ gap: 24 }}>

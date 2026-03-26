@@ -2,8 +2,12 @@ import { NextResponse } from 'next/server';
 import { getCurrentUser, logAudit } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { roleUpdateSchema } from '@/lib/validators';
+import { ensureSameOrigin } from '@/lib/csrf';
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ userId: string }> }) {
+  const csrfError = ensureSameOrigin(request);
+  if (csrfError) return csrfError;
+
   const actor = await getCurrentUser();
   if (!actor || actor.role !== 'ADMIN') {
     return NextResponse.json({ error: 'Недостаточно прав.' }, { status: 403 });

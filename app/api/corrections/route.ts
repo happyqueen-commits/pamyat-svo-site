@@ -1,9 +1,13 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { correctionSchema } from '@/lib/validators';
+import { ensureSameOrigin } from '@/lib/csrf';
 
 export async function POST(request: Request) {
   try {
+    const csrfError = ensureSameOrigin(request);
+    if (csrfError) return csrfError;
+
     const payload = await request.json();
     const parsed = correctionSchema.safeParse(payload);
 

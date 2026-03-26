@@ -1,28 +1,29 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { PersonCard } from './components/PersonCard';
+import { safeDb } from '@/lib/db-safe';
 
 export default async function HomePage() {
   const [approvedPersons, timelinePreview, stats, featuredStory] = await Promise.all([
-    prisma.person.findMany({
+    safeDb(() => prisma.person.findMany({
       where: { status: 'APPROVED' },
       orderBy: [{ verified: 'desc' }, { createdAt: 'desc' }],
       take: 6
-    }),
-    prisma.timelineEntry.findMany({
+    }), []),
+    safeDb(() => prisma.timelineEntry.findMany({
       orderBy: [{ year: 'asc' }, { createdAt: 'asc' }],
       take: 4
-    }),
-    Promise.all([
+    }), []),
+    safeDb(() => Promise.all([
       prisma.person.count({ where: { status: 'APPROVED' } }),
       prisma.story.count(),
       prisma.timelineEntry.count()
-    ]),
-    prisma.story.findFirst({
+    ]), [0, 0, 0]),
+    safeDb(() => prisma.story.findFirst({
       where: { person: { status: 'APPROVED' } },
       include: { person: true },
       orderBy: { createdAt: 'desc' }
-    })
+    }), null)
   ]);
 
   return (
