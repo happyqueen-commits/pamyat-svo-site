@@ -34,6 +34,13 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
   const documents = person.media.filter((item) => item.type === 'DOCUMENT');
   const otherMedia = person.media.filter((item) => item.type !== 'PHOTO' && item.type !== 'DOCUMENT');
 
+  const quickNavItems = [
+    { href: '#person-memory', label: 'Память' },
+    { href: '#person-stories', label: 'Истории' },
+    ...(photos.length > 0 ? [{ href: '#person-photos', label: 'Фото' }] : []),
+    ...(documents.length > 0 || otherMedia.length > 0 ? [{ href: '#person-docs', label: 'Документы' }] : [])
+  ];
+
   return (
     <div className="grid" style={{ gap: 24 }}>
       <section className="memorial-hero" style={getPersonCoverStyle(person.fullName)}>
@@ -60,6 +67,19 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
         </div>
       </section>
 
+
+      <section className="notice-strip person-anchor-nav">
+        <div>
+          <div className="section-kicker">Быстрый переход</div>
+          <div className="meta">Навигация по разделам карточки</div>
+        </div>
+        <div className="actions">
+          {quickNavItems.map((item) => (
+            <a key={item.href} className="button secondary" href={item.href}>{item.label}</a>
+          ))}
+        </div>
+      </section>
+
       <section className="grid grid-3">
         <article className="card news-card info-tile">
           <div className="section-kicker">Источник</div>
@@ -78,7 +98,7 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
         </article>
       </section>
 
-      <section className="grid grid-2-auto">
+      <section id="person-memory" className="grid grid-2-auto">
         {person.memoryText ? (
           <article className="card news-card">
             <div className="section-kicker">Память</div>
@@ -96,7 +116,7 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
       </section>
 
       {photos.length > 0 ? (
-        <section className="section">
+        <section id="person-photos" className="section">
           <div className="section-head">
             <div>
               <div className="section-kicker">Галерея</div>
@@ -125,7 +145,7 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
         </section>
       ) : null}
 
-      <section className="section">
+      <section id="person-stories" className="section">
         <div className="section-head">
           <div>
             <div className="section-kicker">Истории</div>
@@ -154,7 +174,7 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
       </section>
 
       {(documents.length > 0 || otherMedia.length > 0) ? (
-        <section className="section">
+        <section id="person-docs" className="section">
           <div className="section-head">
             <div>
               <div className="section-kicker">Архивные материалы</div>
