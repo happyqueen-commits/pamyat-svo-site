@@ -157,10 +157,10 @@ main.container {
 }
 
 .header-main {
-=======
+
 .header-main,
 .nav-more {
-main
+
   overflow: visible;
 }
 
@@ -1274,7 +1274,11 @@ p {
   font-size: 14px;
 }
 
+
+:where(a, button, input, select, textarea):focus-visible {
+
 :where(a, button, input, select, textarea, summary):focus-visible {
+
   outline: 3px solid rgba(198, 161, 74, 0.95);
   outline-offset: 2px;
   box-shadow: 0 0 0 5px rgba(21, 63, 124, 0.18);
@@ -1332,7 +1336,7 @@ p {
   border-radius: 10px;
 }
 
-main
+
 .alert {
   margin-top: 14px;
   padding: 12px 14px;
@@ -1381,6 +1385,7 @@ main
     align-items: stretch;
   }
 
+
   .nav-more {
     width: 100%;
   }
@@ -1394,7 +1399,7 @@ main
     left: 0;
     right: 0;
   }
-main
+
 
   .person-anchor-nav {
     align-items: flex-start;
@@ -1405,6 +1410,7 @@ main
     justify-content: flex-start;
   }
 }
+
 
 .header-shell {
   position: relative;
@@ -1422,4 +1428,4 @@ main
   background: rgba(255, 255, 255, 0.99);
   backdrop-filter: blur(10px);
 
-main
+

@@ -3,12 +3,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-
 const links = [
   { href: '/', label: 'Главная' },
   { href: '/archive', label: 'Архив' },
   { href: '/university', label: 'Хроника вуза' },
   { href: '/about', label: 'О проекте' },
+
 const primaryLinks = [
   { href: '/', label: 'Главная' },
   { href: '/archive', label: 'Архив' },
@@ -17,7 +17,7 @@ const primaryLinks = [
 ];
 
 const secondaryLinks = [
-main
+
   { href: '/submit', label: 'Предложить материал' },
   { href: '/auth', label: 'Личный кабинет' }
 ];
@@ -33,8 +33,9 @@ export function MainNav() {
   return (
     <nav className="nav-links" aria-label="Основная навигация">
       {links.map((link) => {
+        
       {primaryLinks.map((link) => {
-main
+
         const active = isActive(pathname, link.href);
 
         return (
@@ -48,6 +49,7 @@ main
           </Link>
         );
       })}
+
 
 
       <details className="nav-more">
@@ -69,7 +71,7 @@ main
           })}
         </div>
       </details>
-main
+
     </nav>
   );
 }
