@@ -1389,7 +1389,6 @@ p {
   }
 }
 
-
 .header-shell {
   position: relative;
   z-index: 45;
@@ -1405,4 +1404,4 @@ p {
   z-index: 120;
   background: rgba(255, 255, 255, 0.99);
   backdrop-filter: blur(10px);
-}
+
