@@ -178,3 +178,10 @@ model TimelineEntry {
   category    String
   createdAt   DateTime @default(now())
 }
+
+model RateLimitEntry {
+  key       String   @id
+  count     Int
+  resetAt   DateTime
+  updatedAt DateTime @updatedAt
+}

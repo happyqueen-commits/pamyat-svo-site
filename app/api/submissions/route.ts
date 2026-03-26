@@ -5,11 +5,15 @@ import { saveSubmissionFiles } from '@/lib/uploads';
 import { PersonRole } from '@prisma/client';
 import { getCurrentUser, logAudit } from '@/lib/auth';
 import { getClientIp, rateLimit } from '@/lib/rate-limit';
+import { ensureSameOrigin } from '@/lib/csrf';
 
 export async function POST(request: Request) {
   try {
+    const csrfError = ensureSameOrigin(request);
+    if (csrfError) return csrfError;
+
     const ip = getClientIp(request.headers);
-    const limiter = rateLimit(`submission:${ip}`, 8, 60 * 60 * 1000);
+    const limiter = await rateLimit(`submission:${ip}`, 8, 60 * 60 * 1000);
     if (!limiter.ok) {
       return NextResponse.json({ error: 'Слишком много отправок. Повторите позже.' }, { status: 429 });
     }

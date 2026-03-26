@@ -4,9 +4,13 @@ import { prisma } from '@/lib/prisma';
 import { submissionSchema } from '@/lib/validators';
 import { saveSubmissionFiles } from '@/lib/uploads';
 import { getCurrentUser, logAudit } from '@/lib/auth';
+import { ensureSameOrigin } from '@/lib/csrf';
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const csrfError = ensureSameOrigin(request);
+    if (csrfError) return csrfError;
+
     const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json({ error: 'Требуется авторизация' }, { status: 401 });

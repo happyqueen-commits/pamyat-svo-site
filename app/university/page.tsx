@@ -1,9 +1,10 @@
 import { prisma } from '@/lib/prisma';
+import { safeDb } from '@/lib/db-safe';
 
 export default async function UniversityPage() {
-  const entries = await prisma.timelineEntry.findMany({
+  const entries = await safeDb(() => prisma.timelineEntry.findMany({
     orderBy: [{ year: 'asc' }, { createdAt: 'asc' }]
-  });
+  }), []);
 
   const grouped = entries.reduce<Record<number, typeof entries>>((acc, entry) => {
     acc[entry.year] ||= [];

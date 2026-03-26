@@ -4,10 +4,14 @@ import { createSession, getDefaultRedirect, logAudit } from '@/lib/auth';
 import { verifyPassword } from '@/lib/password';
 import { authLoginSchema } from '@/lib/validators';
 import { getClientIp, rateLimit } from '@/lib/rate-limit';
+import { ensureSameOrigin } from '@/lib/csrf';
 
 export async function POST(request: Request) {
+  const csrfError = ensureSameOrigin(request);
+  if (csrfError) return csrfError;
+
   const ip = getClientIp(request.headers);
-  const rate = rateLimit(`login:${ip}`, 10, 10 * 60 * 1000);
+  const rate = await rateLimit(`login:${ip}`, 10, 10 * 60 * 1000);
   if (!rate.ok) {
     return NextResponse.json({ error: 'Слишком много попыток входа. Повторите позже.' }, { status: 429 });
   }
