@@ -104,6 +104,7 @@ main.container {
 
 .header-shell {
   position: relative;
+  z-index: 45;
   background: transparent;
   border-bottom: none;
   box-shadow: none;
@@ -152,6 +153,12 @@ main.container {
   white-space: nowrap;
   flex: 1;
   justify-content: center;
+  overflow: visible;
+}
+
+.header-main,
+.nav-more {
+  overflow: visible;
 }
 
 .nav-links a {
@@ -1307,6 +1314,10 @@ p {
   padding: 12px;
   border-radius: 16px;
   border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.99);
+  box-shadow: var(--shadow-soft);
+  z-index: 120;
+  backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.98);
   box-shadow: var(--shadow-soft);
   z-index: 30;
