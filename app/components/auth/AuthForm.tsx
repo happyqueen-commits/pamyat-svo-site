@@ -37,7 +37,6 @@ export function AuthForm() {
 
   return (
     <section className="card auth-card">
-      <h2 className="auth-card-title">Вход в кабинет</h2>
       <div className="tabs-row">
         <button type="button" className={`tab-chip ${mode === 'login' ? 'active' : ''}`} onClick={() => setMode('login')}>Вход</button>
         <button type="button" className={`tab-chip ${mode === 'register' ? 'active' : ''}`} onClick={() => setMode('register')}>Регистрация автора</button>
