@@ -3,6 +3,7 @@ import Link from 'next/link';
 import './globals.css';
 import { getCurrentUser } from '@/lib/auth';
 import { UserMenu } from '@/app/components/auth/UserMenu';
+import { MainNav } from '@/app/components/navigation/MainNav';
 
 export const metadata: Metadata = {
   title: 'Книга памяти СВО',
@@ -15,16 +16,12 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="ru">
       <body>
-        <div className="topbar">
-          <div className="container topbar-inner">
+        <div className="topbar" role="note" aria-label="Информация о проекте">
+          <div className="container topbar-inner topbar-inner-centered">
             <div className="topbar-links topbar-projectline">
               <span>Архивно-мемориальный проект</span>
               <span className="topbar-divider" />
               <span>Финансовый университет</span>
-            </div>
-            <div className="quick-links">
-              <Link href="/about">О проекте</Link>
-              <Link href="/submit">Предложить материал</Link>
             </div>
           </div>
         </div>
@@ -38,13 +35,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               </div>
             </Link>
 
-            <nav className="nav-links">
-              <Link href="/">Главная</Link>
-              <Link href="/archive">Архив</Link>
-              <Link href="/university">Хроника вуза</Link>
-              <Link href="/about">О проекте</Link>
-              <Link href="/submit">Предложить материал</Link>
-            </nav>
+            <MainNav />
 
             {user ? <UserMenu name={user.name || user.email} role={user.role} /> : <Link href="/auth" className="button">Войти</Link>}
           </div>
