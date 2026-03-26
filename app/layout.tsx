@@ -16,12 +16,16 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="ru">
       <body>
-        <div className="topbar" role="note" aria-label="Информация о проекте">
-          <div className="container topbar-inner topbar-inner-centered">
+        <div className="topbar">
+          <div className="container topbar-inner">
             <div className="topbar-links topbar-projectline">
               <span>Архивно-мемориальный проект</span>
               <span className="topbar-divider" />
               <span>Финансовый университет</span>
+            </div>
+            <div className="quick-links">
+              <Link href="/about">О проекте</Link>
+              <Link href="/submit">Предложить материал</Link>
             </div>
           </div>
         </div>
