@@ -2,7 +2,7 @@ import { AuthForm } from '@/app/components/auth/AuthForm';
 
 export default function AuthPage() {
   return (
-    <div className="grid" style={{ gap: 24, maxWidth: 980, margin: '0 auto' }}>
+    <div className="grid auth-page" style={{ gap: 24, maxWidth: 980, margin: '0 auto' }}>
       <section className="hero hero-grid">
         <div>
           <span className="badge">Личный кабинет</span>
