@@ -44,7 +44,10 @@ export default async function ArchivePage({
           уже прошли внутреннюю редакторскую проверку.
         </p>
         <form className="filters" action="/archive">
-          <input className="input" name="q" defaultValue={q} placeholder="Поиск по имени, городу, биографии" />
+          <div className="grid" style={{ gap: 8 }}>
+            <input className="input" name="q" defaultValue={q} placeholder="Поиск по имени, городу, биографии" aria-describedby="archive-search-hint" />
+            <p id="archive-search-hint" className="field-hint">Примеры запросов: "Иванов", "Москва", "волонтёр"</p>
+          </div>
           <select className="select" name="role" defaultValue={role}>
             <option value="ALL">Все роли</option>
             {Object.entries(roleLabels).map(([value, label]) => (
@@ -68,7 +71,14 @@ export default async function ArchivePage({
 
       <section className="grid grid-3">
         {persons.length === 0 ? (
-          <div className="card">По вашему запросу карточки не найдены.</div>
+          <div className="card empty-state">
+            <h3>Ничего не найдено</h3>
+            <p className="meta">Попробуйте убрать часть фильтров или использовать более общий запрос.</p>
+            <div className="actions">
+              <Link className="button secondary" href="/archive">Сбросить фильтры</Link>
+              <Link className="button secondary" href="/submit">Предложить материал</Link>
+            </div>
+          </div>
         ) : (
           persons.map((person) => <PersonCard key={person.id} person={person} />)
         )}
